@@ -52,7 +52,8 @@
             <el-scrollbar ref="scrollRef" @scroll.native="handleScroll">
               <el-card v-for="item in showAttendeesList" class="checkin-data-card">
                 <div class="member-info" @click="openDrawer(item)">
-                  <p class="attendee-name">{{ item.member.chineseName }}</p>
+                  <p class="attendee-name">{{ item.member.chineseName || item.member.firstName + ' ' +
+                    item.member.lastName }}</p>
                   <p>{{ memberEnums[item.member.category] }}</p>
                 </div>
                 <el-icon class="checkin-icon" :class="item.isCheckedIn ? 'checkin' : ''"
@@ -111,9 +112,11 @@
       <h1>現場登記</h1>
       <el-form class="insert-form" :model="insertFormData" label-position="top" :rules="formRulesTW"
         ref="insertFormRef">
-        <el-form-item label="會員姓名" prop="chineseName">
+        <el-form-item label="會員中文姓名" prop="chineseName">
           <el-input v-model="insertFormData.chineseName" placeholder="請輸入會員姓名" />
         </el-form-item>
+
+
 
         <el-form-item label="會員信箱" prop="email">
           <el-input v-model="insertFormData.email" placeholder="請輸入會員信箱" />
@@ -132,7 +135,8 @@
             <el-text>{{ attendee.sequenceNo }}</el-text>
           </el-form-item>
           <el-form-item label="會員姓名">
-            <el-text>{{ attendee.member.chineseName }}</el-text>
+            <el-text>{{ attendee.member.chineseName || attendee.member.firstName + ' ' + attendee.member.lastName
+            }}</el-text>
           </el-form-item>
           <el-form-item label="會員類別">
             <el-text>{{ memberEnums[attendee.member.category] }}</el-text>
@@ -250,30 +254,37 @@ const checkin = async () => {
     let category = "";
     switch (res.data.attendeesVO.member.category) {
       case 1:
-        category = "一般會員";
+        category = "醫師";
+        break;
+      case 2:
+        category = "護理師(慈濟)";
+        break;
+      case 3:
+        category = "護理師(非慈濟)";
         break;
     }
+    const receiptNoString = res.data.attendeesVO.receiptNo ? `收據號碼: ${res.data.attendeesVO.receiptNo}` : "";
+    const countryString = res.data.attendeesVO.member.country ? `國家: ${res.data.attendeesVO.member.country}` : "";
+    const name = res.data.attendeesVO.member.chineseName ? res.data.attendeesVO.member.chineseName : res.data.attendeesVO.member.firstName + " " + res.data.attendeesVO.member.lastName;
 
-    console.log(res.data.attendeesVO.isLastYearAttendee);
-    // if (submitCheckData.actionType == 2) return;
+
+
+
     const type = submitCheckData.actionType == 1 ? "簽到成功" : "簽退成功";
-    if (res.data.attendeesVO.isLastYearAttendee) {
-      ElNotification({
-        title: `會員編號:${res.data.attendeesVO.sequenceNo}`,
-        dangerouslyUseHTMLString: true,
-        message: `<p style="color:green;font-weight:bold;">${type}</p> 會員: ${res.data.attendeesVO.member.chineseName}<br/>會員類別: ${category}<br/> <p style="color:green;">為去年年會參加會員</p>`,
-        duration: 5000,
-        type: "success",
-      });
-    } else {
-      ElNotification({
-        title: `會員編號:${res.data.attendeesVO.sequenceNo}`,
-        dangerouslyUseHTMLString: true,
-        message: `<p style="color:green;font-weight:bold;">${type}</p>會員: ${res.data.attendeesVO.member.chineseName}<br/>會員類別: ${category}<br/><p style="color:red;"> 非去年年會參加會員</p>`,
-        duration: 5000,
-        type: "success",
-      });
-    }
+
+    ElNotification({
+      title: `會員編號:${res.data.attendeesVO.sequenceNo}`,
+      dangerouslyUseHTMLString: true,
+      message: `<p style="color:green;font-weight:bold;">${type}</p>
+      會員: ${name}<br/>
+      會員類別: ${category}<br/>
+      ${receiptNoString}<br/>
+      ${countryString}
+      `,
+      type: "success",
+      duration: 0
+    });
+
 
     handleUpdateList();
     getCheckData();

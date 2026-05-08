@@ -142,10 +142,21 @@ watch(
   { immediate: true, deep: true }
 );
 
+watch(
+  () => updateFormData.value,
+  (newVal) => {
+    if (newVal) {
+      console.log('更新表單數據:', newVal);
+    }
+  },
+  { immediate: true }
+);
+
 const handleUpdateSubmit = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid: boolean) => {
     if (valid) {
+      console.log('更新會員資料:', updateFormData.value);
       emits('updateMember', updateFormData.value);
       updateFormRef.value?.resetFields();
     } else {
