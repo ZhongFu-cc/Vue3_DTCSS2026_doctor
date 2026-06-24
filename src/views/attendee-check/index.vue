@@ -264,7 +264,7 @@ const checkin = async () => {
     ElNotification({
       title: `會員編號:${res.data.attendeesVO.sequenceNo}`,
       dangerouslyUseHTMLString: true,
-      message: `<p style="color:green;font-weight:bold;">${type}</p>會員: ${res.data.attendeesVO.member.chineseName ? res.data.attendeesVO.member.chineseName : res.data.attendeesVO.member.firstName + ' ' + res.data.attendeesVO.member.lastName}<br/>會員類別: ${category}<br/><p style="color:red;"> 非去年年會參加會員</p>`,
+      message: `<p style="color:green;font-weight:bold;">${type}</p>會員: ${res.data.attendeesVO.member.chineseName ? res.data.attendeesVO.member.chineseName : res.data.attendeesVO.member.firstName + ' ' + res.data.attendeesVO.member.lastName}<br/>會員類別: ${category}<br/>`,
       duration: 0,
       type: "success",
     });
