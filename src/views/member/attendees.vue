@@ -28,23 +28,27 @@
       <template #data-table>
         <el-table class="news-table" :data="attendeeList.records" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55" />
-          <el-table-column fixed prop="firstName" label="名字" width="90">
+          <!-- <el-table-column fixed prop="firstName" label="名字" width="90">
             <template #default="scope">
               {{ scope.row.member.firstName }}
             </template>
-          </el-table-column>
-          <el-table-column fixed prop="lastName" label="姓氏" width="90">
-            <template #default="scope">
+</el-table-column>
+<el-table-column fixed prop="lastName" label="姓氏" width="90">
+  <template #default="scope">
               {{ scope.row.member.lastName }}
             </template>
+</el-table-column> -->
+          <el-table-column fixed prop="chineseName" label="姓名" width="120">
+            <template #default="scope">
+              {{ scope.row.member.chineseName }}
+            </template>
           </el-table-column>
-
           <el-table-column fixed prop="idCard" label="身分證" width="190">
             <template #default="scope">
               {{ scope.row.member.idCard }}
             </template>
           </el-table-column>
-          <el-table-column fixed prop="lastName" label="飲食偏好" width="100">
+          <el-table-column fixed prop="food" label="飲食偏好" width="100">
             <template #default="scope">
               {{ scope.row.member.food }}
             </template>
@@ -209,11 +213,11 @@ let updateMemberRegistrationFeeOrder = reactive<Record<string, any>>({
 
 })
 
-const attendeeList = reactive<any>([])
+const attendeeList = ref<any>([])
 
 const getAttendeeList = async () => {
   let res = await getAttendeeListByTagAndPaginationApi(currentPage.value, input.value)
-  Object.assign(attendeeList, res.data)
+  attendeeList.value = res.data
 }
 
 const findFirstVaildTag = (tagList: any) => {
