@@ -196,6 +196,7 @@ function handleSubmit() {
   });
 }
 
+
 /** 关闭字典类型弹窗 */
 function closeDialog() {
   dialog.visible = false;

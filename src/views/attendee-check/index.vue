@@ -117,6 +117,10 @@
           <el-input v-model="insertFormData.chineseName" placeholder="請輸入會員姓名" />
         </el-form-item>
 
+        <el-form-item label="醫療機構名稱(醫院)" prop="affiliation">
+          <el-input v-model="insertFormData.affiliation" placeholder="請輸入醫療機構名稱" />
+        </el-form-item>
+
         <el-form-item label="會員信箱" prop="email">
           <el-input v-model="insertFormData.email" placeholder="請輸入會員信箱" />
         </el-form-item>
@@ -377,6 +381,7 @@ const insertFormData = reactive<any>({
   chineseName: "",
   email: "",
   category: "1",
+  affiliation: "",
 });
 
 const insertAttendees = (formEl: FormInstance | undefined) => {
